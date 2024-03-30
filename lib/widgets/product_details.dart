@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ricoz_assignment/widgets/appbar_product_details.dart';
+import 'package:ricoz_assignment/widgets/custom_bottom_navbar.dart';
 
 class ProductDetails extends StatefulWidget {
-  ProductDetails(
-      {super.key,
-      required this.brand,
-      required this.title,
-      required this.rating,
-      required this.price,
-      required this.description});
-  final String brand, title, description, rating, price;
+  ProductDetails({
+    super.key,
+    required this.brand,
+    required this.title,
+    required this.rating,
+    required this.price,
+    required this.category,
+    required this.description,
+  });
+  final String brand, title, description, rating, price, category;
+  // List<dynamic>? sliderImage;
+
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
 }
@@ -23,8 +28,11 @@ class _ProductDetailsState extends State<ProductDetails> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const CustomAppBarProductDetails(),
+        title: CustomAppBarProductDetails(
+          title: widget.category,
+        ),
       ),
+      bottomNavigationBar: CustomBottomNavigationBar(),
       body: SizedBox(
         height: height,
         width: width,
@@ -42,6 +50,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                     width: width * 0.65,
                     color: Colors.blue,
                     margin: EdgeInsets.only(right: width * 0.01),
+
+                    // child: Image.network(widget.sliderImage![index].toString()),
                   );
                 },
               ),
@@ -59,18 +69,21 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        widget.title,
-                        style: GoogleFonts.lato(
-                          textStyle: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFF222222),
+                      SizedBox(
+                        width: width * 0.5,
+                        child: Text(
+                          widget.title,
+                          style: GoogleFonts.lato(
+                            textStyle: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xFF222222),
+                            ),
                           ),
                         ),
                       ),
                       Text(
-                        widget.price,
+                        '\$${widget.price}',
                         style: GoogleFonts.lato(
                           textStyle: const TextStyle(
                             fontSize: 24,
@@ -95,7 +108,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         const TextStyle(fontSize: 12, color: Color(0xFF9B9B9B)),
                   ),
                   SizedBox(
-                    height: height * 0.04,
+                    height: height * 0.02,
                   ),
                   Text(
                     widget.description,

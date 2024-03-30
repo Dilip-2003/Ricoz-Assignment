@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomAppBarProductDetails extends StatefulWidget {
-  const CustomAppBarProductDetails({super.key});
-
+  CustomAppBarProductDetails({super.key, required this.title});
+  final String title;
   @override
   State<CustomAppBarProductDetails> createState() =>
       _CustomAppBarProductDetailsState();
@@ -27,7 +27,7 @@ class _CustomAppBarProductDetailsState
           ),
         ),
         Text(
-          'Short dress',
+          widget.title.toUpperCase(),
           style: GoogleFonts.lato(
               textStyle: const TextStyle(
                   fontSize: 18,
