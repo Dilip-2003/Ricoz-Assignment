@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:ricoz_assignment/constant/textstyle/textstyle.dart';
 import 'package:ricoz_assignment/widgets/product_details.dart';
 
 class ProductList extends StatefulWidget {
@@ -55,6 +56,10 @@ class _ProductListState extends State<ProductList> {
               context,
               MaterialPageRoute(
                 builder: (context) {
+                  sliderImages = products[index]['images'];
+                  if (kDebugMode) {
+                    print(sliderImages);
+                  }
                   return ProductDetails(
                     brand: products[index]['brand'].toString(),
                     price: finaldiscountPrice,
@@ -62,6 +67,7 @@ class _ProductListState extends State<ProductList> {
                     title: products[index]['title'].toString(),
                     description: products[index]['description'].toString(),
                     category: products[index]['category'].toString(),
+                    sliderImage: sliderImages,
                   );
                 },
               ),
@@ -78,7 +84,7 @@ class _ProductListState extends State<ProductList> {
                       blurRadius: 25,
                       spreadRadius: 0,
                       offset: const Offset(1, 4),
-                      color: const Color(0xff00000014).withOpacity(0.08))
+                      color: const Color(0xff000000).withOpacity(0.08))
                 ]),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -97,9 +103,9 @@ class _ProductListState extends State<ProductList> {
                               fit: BoxFit.cover,
                             )
                           : Container(
-                              width: width * 0.48,
-                              height: height * 0.12,
-                              color: Colors.grey, // Placeholder color
+                              width: width * 0.46,
+                              height: height * 0.18,
+                              color: Colors.grey,
                             ),
                     ),
                     Positioned(
@@ -115,11 +121,7 @@ class _ProductListState extends State<ProductList> {
                         child: products[index]['discountPercentage'] != null
                             ? Text(
                                 '-${products[index]['discountPercentage'].toString()}%',
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w900,
-                                  color: Color(0xFFFFFFFF),
-                                ),
+                                style: TextStyles.discount,
                               )
                             : const Text('-0%'),
                       ),
@@ -132,20 +134,10 @@ class _ProductListState extends State<ProductList> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '⭐⭐⭐⭐⭐($rating)',
-                        style: const TextStyle(
-                            fontSize: 12, color: Color(0xFF9B9B9B)),
-                      ),
+                      Text('⭐⭐⭐⭐⭐($rating)', style: TextStyles.rating),
                       products[index]['brand'] != null
-                          ? Text(
-                              products[index]['brand'].toString(),
-                              style: GoogleFonts.lato(
-                                  textStyle: const TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xFF9B9B9B))),
-                            )
+                          ? Text(products[index]['brand'].toString(),
+                              style: TextStyles.brand)
                           : Container(
                               width: 10,
                               height: 10,
@@ -154,16 +146,8 @@ class _ProductListState extends State<ProductList> {
                       products[index]['title'] != null
                           ? SizedBox(
                               width: width * 0.38,
-                              child: Text(
-                                products[index]['title'].toString(),
-                                style: GoogleFonts.lato(
-                                  textStyle: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w900,
-                                    color: Color(0xFF222222),
-                                  ),
-                                ),
-                              ),
+                              child: Text(products[index]['title'].toString(),
+                                  style: TextStyles.title),
                             )
                           : Container(
                               width: 10,
@@ -175,26 +159,13 @@ class _ProductListState extends State<ProductList> {
                           products[index]['price'] != null
                               ? Text(
                                   '\$${products[index]['price'].toString()}  ',
-                                  style: GoogleFonts.lato(
-                                    textStyle: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF9B9B9B),
-                                      decoration: TextDecoration.lineThrough,
-                                    ),
-                                  ),
+                                  style: TextStyles.price,
                                 )
                               : const Text('0\$'),
                           products[index]['price'] != null
                               ? Text(
                                   '  \$$finaldiscountPrice',
-                                  style: GoogleFonts.lato(
-                                    textStyle: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFFDB3022),
-                                    ),
-                                  ),
+                                  style: TextStyles.discountprice,
                                 )
                               : const Text('0\$'),
                         ],

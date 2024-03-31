@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:ricoz_assignment/constant/textstyle/textstyle.dart';
 import 'package:ricoz_assignment/widgets/appbar_product_details.dart';
-import 'package:ricoz_assignment/widgets/custom_bottom_navbar.dart';
+import 'package:ricoz_assignment/widgets/custom_button.dart';
 
+// ignore: must_be_immutable
 class ProductDetails extends StatefulWidget {
   ProductDetails({
     super.key,
@@ -12,15 +13,17 @@ class ProductDetails extends StatefulWidget {
     required this.price,
     required this.category,
     required this.description,
+    this.sliderImage,
   });
   final String brand, title, description, rating, price, category;
-  // List<dynamic>? sliderImage;
+  List<dynamic>? sliderImage;
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  bool isActive = false;
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.sizeOf(context).height;
@@ -32,99 +35,116 @@ class _ProductDetailsState extends State<ProductDetails> {
           title: widget.category,
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(),
-      body: SizedBox(
-        height: height,
-        width: width,
-        child: Column(
-          children: [
-            SizedBox(
-              height: height * 0.5,
-              width: width,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Container(
-                    height: height * 0.5,
-                    width: width * 0.65,
-                    color: Colors.blue,
-                    margin: EdgeInsets.only(right: width * 0.01),
-
-                    // child: Image.network(widget.sliderImage![index].toString()),
-                  );
-                },
-              ),
-            ),
-            Container(
-              height: height * 0.27,
-              width: width * 0.96,
-              padding: EdgeInsets.symmetric(horizontal: width * 0.02),
-              margin: EdgeInsets.symmetric(
-                  vertical: height * 0.01, horizontal: width * 0.04),
-              // color: Colors.red,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: width * 0.5,
-                        child: Text(
-                          widget.title,
-                          style: GoogleFonts.lato(
-                            textStyle: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w900,
-                              color: Color(0xFF222222),
+      body: Stack(
+        children: [
+          SizedBox(
+            height: height,
+            width: width,
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    SizedBox(
+                      height: height * 0.5,
+                      width: width,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: widget.sliderImage!.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.only(right: width * 0.01),
+                            child: Image.network(
+                              widget.sliderImage![index].toString(),
+                              height: height * 0.45,
+                              width: width * 0.75,
+                              fit: BoxFit.cover,
                             ),
-                          ),
+                          );
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: Container(
+                        height: width * 0.12,
+                        width: width * 0.12,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFFFFF),
+                          borderRadius: BorderRadius.circular(50),
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 4,
+                                color: const Color(0xFF000000).withOpacity(0.8),
+                                spreadRadius: 0,
+                                offset: const Offset(0, 4)),
+                          ],
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isActive = !isActive;
+                            });
+                          },
+                          icon: isActive
+                              ? const Icon(
+                                  Icons.favorite,
+                                  size: 30,
+                                  color: Colors.red,
+                                )
+                              : const Icon(
+                                  Icons.favorite_border,
+                                  size: 30,
+                                ),
                         ),
                       ),
-                      Text(
-                        '\$${widget.price}',
-                        style: GoogleFonts.lato(
-                          textStyle: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFF222222),
+                    )
+                  ],
+                ),
+                Container(
+                  height: height * 0.35,
+                  width: width * 0.96,
+                  margin: EdgeInsets.symmetric(
+                      vertical: height * 0.005, horizontal: width * 0.04),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: width * 0.5,
+                            child: Text(
+                              widget.title,
+                              style: TextStyles.titleProductDiscount,
+                            ),
                           ),
-                        ),
+                          Text(
+                            '\$${widget.price}',
+                            style: TextStyles.titleProductDiscount,
+                          )
+                        ],
+                      ),
+                      Text(widget.brand, style: TextStyles.brand),
+                      Text(
+                        widget.rating,
+                        style: TextStyles.rating,
+                      ),
+                      SizedBox(
+                        height: height * 0.02,
+                      ),
+                      Text(
+                        widget.description,
+                        style: TextStyles.description,
                       )
                     ],
                   ),
-                  Text(
-                    widget.brand,
-                    style: GoogleFonts.lato(
-                        textStyle: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF9B9B9B))),
-                  ),
-                  Text(
-                    widget.rating,
-                    style:
-                        const TextStyle(fontSize: 12, color: Color(0xFF9B9B9B)),
-                  ),
-                  SizedBox(
-                    height: height * 0.02,
-                  ),
-                  Text(
-                    widget.description,
-                    style: GoogleFonts.lato(
-                      textStyle: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF222222),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
+                )
+              ],
+            ),
+          ),
+          const Positioned(bottom: 5, child: CustomButtonNavbar()),
+        ],
       ),
     );
   }
